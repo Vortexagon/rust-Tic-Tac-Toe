@@ -12,8 +12,8 @@ pub enum State {
 }
 
 pub struct Board {
-    x_layer: i32,
-    o_layer: i32,
+    x_layer: u32,
+    o_layer: u32,
 }
 
 
@@ -46,19 +46,19 @@ impl Board {
     }
 
 
-    pub fn set_cell(&mut self, layer: &Layer, index: i32) {
+    pub fn set_cell(&mut self, layer: &Layer, index: u32) {
         match layer {
             &Layer::X => self.x_layer |= 1 << index,
             &Layer::O => self.o_layer |= 1 << index,
         }
     }
 
-    pub fn clear_cell(&mut self, index: i32) {
+    pub fn clear_cell(&mut self, index: u32) {
         self.x_layer &= !(1 << index);
         self.o_layer &= !(1 << index);
     }
 
-    pub fn get_free_cells(&self) -> Vec<i32> {
+    pub fn get_free_cells(&self) -> Vec<u32> {
         let mut free_cells = Vec::new();
         let free_board = !(self.x_layer | self.o_layer);
 

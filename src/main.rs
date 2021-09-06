@@ -17,9 +17,9 @@ fn handle_user_move(board: &mut Board, layer: &Layer) {
             .read_line(&mut choice)
             .expect("Error handling input");
 
-        let index: i32 = match choice.trim().parse() {
+        let index: u32 = match choice.trim().parse() {
             Ok(num) => {
-                if num >= 0 && num <= 8 && board.get_free_cells().contains(&num) {
+                if num <= 8 && board.get_free_cells().contains(&num) {
                     num
                 } else {
                     continue
