@@ -1,66 +1,67 @@
 #[derive(PartialEq, Debug)]
-pub enum Layer {
-    X,
-    O,
+pub enum Mark {
+    Cross,
+    Nought,
+    Empty,
 }
 
 #[derive(PartialEq, Debug)]
 pub enum State {
     Unfinished,
     Draw,
-    Win(Layer),
+    Win(Mark),
 }
 
 pub struct Board {
-    x_layer: u32,
-    o_layer: u32,
+    cross_layer: u32,
+    nought_layer: u32,
 }
-
 
 impl Board {
     pub fn new() -> Board {
         Board {
-            x_layer: 0,
-            o_layer: 0,
+            cross_layer: 0,
+            nought_layer: 0,
         }
     }
 
-
     pub fn print_board(&self) {
         for i in 0..3 {
-            println!("\n+---+---+---+");
+            println!("+---+---+---+");
             print!("|");
             for j in 0..3 {
                 let index = i * 3 + j;
 
-                if self.x_layer & 1 << index != 0 {
-                    print!(" X |");
-                } else if self.o_layer & 1 << index != 0 {
-                    print!(" O |");
+                if self.cross_layer & 1 << index != 0 {
+                    print!(" X ");
+                } else if self.nought_layer & 1 << index != 0 {
+                    print!(" O ");
                 } else {
-                    print!(" {} |", index);
+                    print!(" {} ", index);
                 }
+                print!("|");
             }
+            print!("\n");
         }
-        println!("\n+---+---+---+");
+        println!("+---+---+---+");
     }
 
-
-    pub fn set_cell(&mut self, layer: &Layer, index: u32) {
-        match layer {
-            &Layer::X => self.x_layer |= 1 << index,
-            &Layer::O => self.o_layer |= 1 << index,
+    pub fn set_cell(&mut self, mark: &Mark, index: u32) {
+        match mark {
+            Mark::Cross => self.cross_layer |= 1 << index,
+            Mark::Nought => self.nought_layer |= 1 << index,
+            Mark::Empty => self.clear_cell(index),
         }
     }
 
     pub fn clear_cell(&mut self, index: u32) {
-        self.x_layer &= !(1 << index);
-        self.o_layer &= !(1 << index);
+        self.cross_layer &= !(1 << index);
+        self.nought_layer &= !(1 << index);
     }
 
     pub fn get_free_cells(&self) -> Vec<u32> {
         let mut free_cells = Vec::new();
-        let free_board = !(self.x_layer | self.o_layer);
+        let free_board = !(self.cross_layer | self.nought_layer);
 
         for i in 0..9 {
             if free_board & 1 << i != 0 {
@@ -84,11 +85,11 @@ impl Board {
         ];
 
         for mask in win_masks.iter() {
-            if self.x_layer & mask == *mask { return State::Win(Layer::X); }
-            if self.o_layer & mask == *mask { return State::Win(Layer::O); }
+            if self.cross_layer & mask == *mask { return State::Win(Mark::Cross); }
+            if self.nought_layer & mask == *mask { return State::Win(Mark::Nought); }
         }
 
-        if self.x_layer | self.o_layer == 0b111_111_111 { return State::Draw; }
+        if self.cross_layer | self.nought_layer == 0b111_111_111 { return State::Draw; }
 
         State::Unfinished
     }

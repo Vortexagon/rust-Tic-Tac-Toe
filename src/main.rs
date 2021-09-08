@@ -1,12 +1,12 @@
 mod board;
 mod ai;
 
-use board::{Board, Layer, State};
+use board::{Board, Mark, State};
 use ai::OptimalAi;
 
 use std::io::{self, Write};
 
-fn handle_user_move(board: &mut Board, layer: &Layer) {
+fn handle_user_move(board: &mut Board, mark: &Mark) {
     loop {
         let mut choice = String::new();
 
@@ -28,7 +28,7 @@ fn handle_user_move(board: &mut Board, layer: &Layer) {
             Err(_) => continue,
         };
 
-        board.set_cell(layer, index);
+        board.set_cell(mark, index);
         break;
     }
 }
@@ -39,13 +39,13 @@ fn main() {
     while game_board.get_state() == State::Unfinished {
 
         game_board.print_board();
-        handle_user_move(&mut game_board, &Layer::X);
+        handle_user_move(&mut game_board, &Mark::Cross);
 
         if game_board.get_state() != State::Unfinished {
             break;
         };
 
-        OptimalAi::make_move(&mut game_board, &Layer::O);
+        OptimalAi::make_move(&mut game_board, &Mark::Nought);
     }
 
     game_board.print_board();
