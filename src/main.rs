@@ -34,7 +34,7 @@ fn handle_user_move(board: &mut Board, mark: &Mark) {
 }
 
 fn main() {
-    let mut game_board = Board::new();
+    let mut game_board = Board::default();
 
     while game_board.get_state() == State::Unfinished {
 

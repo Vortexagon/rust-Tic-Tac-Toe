@@ -14,19 +14,13 @@ pub enum State {
     Win(Mark),
 }
 
+#[derive(Default)]
 pub struct Board {
     cross_layer: u32,
     nought_layer: u32,
 }
 
 impl Board {
-    pub fn new() -> Board {
-        Board {
-            cross_layer: 0,
-            nought_layer: 0,
-        }
-    }
-
     pub fn set_cell(&mut self, mark: &Mark, index: u32) {
         match mark {
             Mark::Cross => self.cross_layer |= 1 << index,
@@ -65,7 +59,7 @@ impl Board {
             0b001_010_100,
         ];
 
-        for mask in win_masks.iter() {
+        for mask in win_masks {
             if self.cross_layer & mask == *mask { return State::Win(Mark::Cross); }
             if self.nought_layer & mask == *mask { return State::Win(Mark::Nought); }
         }
