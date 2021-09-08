@@ -1,3 +1,5 @@
+use std::fmt::{self, Display, Formatter};
+
 #[derive(PartialEq, Debug)]
 pub enum Mark {
     Cross,
@@ -23,27 +25,6 @@ impl Board {
             cross_layer: 0,
             nought_layer: 0,
         }
-    }
-
-    pub fn print_board(&self) {
-        for i in 0..3 {
-            println!("+---+---+---+");
-            print!("|");
-            for j in 0..3 {
-                let index = i * 3 + j;
-
-                if self.cross_layer & 1 << index != 0 {
-                    print!(" X ");
-                } else if self.nought_layer & 1 << index != 0 {
-                    print!(" O ");
-                } else {
-                    print!(" {} ", index);
-                }
-                print!("|");
-            }
-            print!("\n");
-        }
-        println!("+---+---+---+");
     }
 
     pub fn set_cell(&mut self, mark: &Mark, index: u32) {
@@ -92,5 +73,31 @@ impl Board {
         if self.cross_layer | self.nought_layer == 0b111_111_111 { return State::Draw; }
 
         State::Unfinished
+    }
+}
+
+impl Display for Board {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        let mut result_str = String::with_capacity(169);
+
+        for i in 0..3 {
+            result_str.push_str("+---+---+---+\n|");
+            for j in 0..3 {
+                let index = i * 3 + j;
+
+                if self.cross_layer & 1 << index != 0 {
+                    result_str.push_str(" X ");
+                } else if self.nought_layer & 1 << index != 0 {
+                    result_str.push_str(" O ");
+                } else {
+                    result_str.push_str(&*format!(" {} ", index));
+                }
+                result_str.push_str("|");
+            }
+            result_str.push_str("\n");
+        }
+        result_str.push_str("+---+---+---+\n");
+
+        write!(f, "{}", result_str)
     }
 }

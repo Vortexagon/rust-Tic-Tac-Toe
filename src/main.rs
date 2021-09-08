@@ -38,7 +38,7 @@ fn main() {
 
     while game_board.get_state() == State::Unfinished {
 
-        game_board.print_board();
+        println!("{}", game_board);
         handle_user_move(&mut game_board, &Mark::Cross);
 
         if game_board.get_state() != State::Unfinished {
@@ -48,7 +48,7 @@ fn main() {
         OptimalAi::make_move(&mut game_board, &Mark::Nought);
     }
 
-    game_board.print_board();
+    println!("{}", game_board);
     println!("Result: {:?}", game_board.get_state());
 
 }
