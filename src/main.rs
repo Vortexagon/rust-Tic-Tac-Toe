@@ -12,7 +12,10 @@ fn handle_user_move(board: &mut Board, mark: Mark) {
         let valid_choices = board.get_free_cells();
 
         print!("Enter a number: ");
-        io::stdout().flush().expect("Error flushing output");
+
+        io::stdout()
+            .flush()
+            .expect("Error flushing output");
 
         io::stdin()
             .read_line(&mut choice)
@@ -20,11 +23,7 @@ fn handle_user_move(board: &mut Board, mark: Mark) {
 
         let index: u32 = match choice.trim().parse() {
             Ok(num) => {
-                if num <= 8 && valid_choices.contains(&num) {
-                    num
-                } else {
-                    continue
-                }
+                if num <= 8 && valid_choices.contains(&num) { num } else { continue }
             },
             Err(_) => continue,
         };
