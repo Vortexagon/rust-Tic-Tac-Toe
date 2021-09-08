@@ -60,8 +60,8 @@ impl Board {
         ];
 
         for mask in win_masks {
-            if self.cross_layer & mask == *mask { return State::Win(Mark::Cross); }
-            if self.nought_layer & mask == *mask { return State::Win(Mark::Nought); }
+            if self.cross_layer & mask == mask { return State::Win(Mark::Cross); }
+            if self.nought_layer & mask == mask { return State::Win(Mark::Nought); }
         }
 
         if self.cross_layer | self.nought_layer == 0b111_111_111 { return State::Draw; }
