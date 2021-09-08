@@ -1,6 +1,6 @@
 use std::fmt::{self, Display, Formatter};
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Copy, Clone)]
 pub enum Mark {
     Cross,
     Nought,
@@ -21,7 +21,7 @@ pub struct Board {
 }
 
 impl Board {
-    pub fn set_cell(&mut self, mark: &Mark, index: u32) {
+    pub fn set_cell(&mut self, mark: Mark, index: u32) {
         match mark {
             Mark::Cross => self.cross_layer |= 1 << index,
             Mark::Nought => self.nought_layer |= 1 << index,

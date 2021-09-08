@@ -6,9 +6,10 @@ use ai::OptimalAi;
 
 use std::io::{self, Write};
 
-fn handle_user_move(board: &mut Board, mark: &Mark) {
+fn handle_user_move(board: &mut Board, mark: Mark) {
     loop {
         let mut choice = String::new();
+        let valid_choices = board.get_free_cells();
 
         print!("Enter a number: ");
         io::stdout().flush().expect("Error flushing output");
@@ -19,7 +20,7 @@ fn handle_user_move(board: &mut Board, mark: &Mark) {
 
         let index: u32 = match choice.trim().parse() {
             Ok(num) => {
-                if num <= 8 && board.get_free_cells().contains(&num) {
+                if num <= 8 && valid_choices.contains(&num) {
                     num
                 } else {
                     continue
@@ -39,13 +40,13 @@ fn main() {
     while game_board.get_state() == State::Unfinished {
 
         println!("{}", game_board);
-        handle_user_move(&mut game_board, &Mark::Cross);
+        handle_user_move(&mut game_board, Mark::Cross);
 
         if game_board.get_state() != State::Unfinished {
             break;
         };
 
-        OptimalAi::make_move(&mut game_board, &Mark::Nought);
+        OptimalAi::make_move(&mut game_board, Mark::Nought);
     }
 
     println!("{}", game_board);

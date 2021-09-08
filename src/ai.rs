@@ -3,11 +3,11 @@ use super::board::{Board, State, Mark};
 pub struct OptimalAi;
 
 impl OptimalAi {
-    fn opposite(mark: &Mark) -> &Mark {
-        if mark == &Mark::Cross { &Mark::Nought } else { &Mark::Cross }
+    fn opposite(mark: Mark) -> Mark {
+        if mark == Mark::Cross { Mark::Nought } else { Mark::Cross }
     }
 
-    pub fn make_move(board: &mut Board, ai_mark: &Mark) {
+    pub fn make_move(board: &mut Board, ai_mark: Mark) {
         let mut best_score = -999;
         let mut best_index = 0;
 
@@ -25,17 +25,21 @@ impl OptimalAi {
         board.set_cell(ai_mark, best_index);
     }
 
-    pub fn minimax(board: &mut Board, maximising: bool, ai_mark: &Mark) -> i32 {
+    pub fn minimax(board: &mut Board, maximising: bool, ai_mark: Mark) -> i32 {
         let state = board.get_state();
         let opp_mark = OptimalAi::opposite(ai_mark);
 
         match state {
             State::Win(mark) => {
-                if mark == *ai_mark { return 1; }
-                else { return -1; }
+                if mark == ai_mark {
+                    return 1;
+                }
+                else {
+                    return -1;
+                }
             },
             State::Draw => return 0,
-            State::Unfinished => {},
+            State::Unfinished => (),
         };
 
         let mut final_score = if maximising { -999 } else { 999 };
