@@ -1,8 +1,8 @@
-mod board;
 mod ai;
+mod board;
 
-use board::{Board, Mark, State};
 use ai::OptimalAi;
+use board::{Board, Mark, State};
 
 use std::io::{self, Write};
 
@@ -13,9 +13,7 @@ fn handle_user_move(board: &mut Board, mark: Mark) {
 
         print!("Enter a number: ");
 
-        io::stdout()
-            .flush()
-            .expect("Error flushing output");
+        io::stdout().flush().expect("Error flushing output");
 
         io::stdin()
             .read_line(&mut choice)
@@ -23,8 +21,12 @@ fn handle_user_move(board: &mut Board, mark: Mark) {
 
         let index: u32 = match choice.trim().parse() {
             Ok(num) => {
-                if num <= 8 && valid_choices.contains(&num) { num } else { continue }
-            },
+                if num <= 8 && valid_choices.contains(&num) {
+                    num
+                } else {
+                    continue;
+                }
+            }
             Err(_) => continue,
         };
 
@@ -37,7 +39,6 @@ fn main() {
     let mut game_board = Board::default();
 
     while game_board.get_state() == State::Unfinished {
-
         println!("{}", game_board);
         handle_user_move(&mut game_board, Mark::Cross);
 
@@ -50,5 +51,4 @@ fn main() {
 
     println!("{}", game_board);
     println!("Result: {:?}", game_board.get_state());
-
 }

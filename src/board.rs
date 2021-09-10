@@ -42,7 +42,7 @@ impl Board {
             if free_board & 1 << i != 0 {
                 free_cells.push(i);
             }
-        };
+        }
 
         free_cells
     }
@@ -60,11 +60,17 @@ impl Board {
         ];
 
         for mask in win_masks {
-            if self.cross_layer & mask == mask { return State::Win(Mark::Cross); }
-            if self.nought_layer & mask == mask { return State::Win(Mark::Nought); }
+            if self.cross_layer & mask == mask {
+                return State::Win(Mark::Cross);
+            }
+            if self.nought_layer & mask == mask {
+                return State::Win(Mark::Nought);
+            }
         }
 
-        if self.cross_layer | self.nought_layer == 0b111_111_111 { return State::Draw; }
+        if self.cross_layer | self.nought_layer == 0b111_111_111 {
+            return State::Draw;
+        }
 
         State::Unfinished
     }
