@@ -16,8 +16,8 @@ pub enum State {
 
 #[derive(Default)]
 pub struct Board {
-    cross_layer: u32,
-    nought_layer: u32,
+    pub(crate) cross_layer: u32,
+    pub(crate) nought_layer: u32,
 }
 
 impl Board {

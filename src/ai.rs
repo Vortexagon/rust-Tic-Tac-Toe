@@ -1,6 +1,10 @@
-use super::board::{Board, Mark, State};
+use crate::board::{Board, Mark, State};
+use rand;
+use rand::Rng;
 use std::cmp;
+use std::collections::HashMap;
 use std::time::Instant;
+
 pub struct OptimalAi;
 
 impl OptimalAi {
@@ -77,5 +81,37 @@ impl OptimalAi {
             }
         }
         final_score
+    }
+}
+
+struct ZobristCache {
+    state: u64,
+    keys: [[u64; 9]; 2],
+    data: HashMap<u64, i32>,
+}
+
+impl ZobristCache {
+    fn new(board: &Board) -> Self {
+        let mut rng = rand::thread_rng();
+        let mut vals = [[0u64; 9]; 2];
+        let mut initial_state: u64 = 0;
+
+        (0..9)
+            .zip(0..2)
+            .for_each(|(cell, col)| vals[cell][col] = rng.gen());
+
+        for i in 0..9 {
+            if board.nought_layer & 1 << i != 0 {
+                initial_state ^= vals[i][0];
+            } else if board.cross_layer & 1 << i != 0 {
+                initial_state ^= vals[i][1];
+            }
+        }
+
+        Self {
+            state: initial_state,
+            keys: vals,
+            data: HashMap::new(),
+        }
     }
 }
