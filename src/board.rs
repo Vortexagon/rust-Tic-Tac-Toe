@@ -36,14 +36,13 @@ impl Board {
 
     pub fn get_free_cells(&self) -> Vec<u32> {
         let mut free_cells = Vec::new();
-        let free_board = !(self.cross_layer | self.nought_layer);
+        let free_board = self.cross_layer | self.nought_layer;
 
         for i in 0..9 {
-            if free_board & 1 << i != 0 {
+            if free_board & 1 << i == 0 {
                 free_cells.push(i);
             }
         }
-
         free_cells
     }
 
@@ -71,7 +70,6 @@ impl Board {
         if self.cross_layer | self.nought_layer == 0b111_111_111 {
             return State::Draw;
         }
-
         State::Unfinished
     }
 }
